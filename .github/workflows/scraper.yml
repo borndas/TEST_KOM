@@ -2,9 +2,9 @@ name: Check Alumni Activities
 
 on:
   schedule:
-    # 每天早上 8 點執行一次 (UTC時間 00:00)
-    - cron: '0 0 * * *'
-  workflow_dispatch: # 允許手動觸發執行
+    # 每個小時的第 0 分鐘執行一次 (例如 08:00, 09:00, 10:00...)
+    - cron: '0 * * * *'
+  workflow_dispatch: # 依然保留手動觸發的功能
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
