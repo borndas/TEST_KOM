@@ -11,9 +11,11 @@ jobs:
   scrape-and-notify:
     runs-on: ubuntu-latest
 
-    steps:
+   steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  # 或是 v4
+      with:
+        fetch-depth: 0   # <--- 加入這行！這告訴 Git 下載完整的歷史紀錄，是解決衝突的關鍵
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -36,18 +38,21 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # 加入檔案
         git add state.json
         
-        # 檢查是否有檔案更動
+        # 檢查檔案是否有改變
         if ! git diff --staged --quiet; then
+          # 1. 先建立本地的 Commit
           git commit -m "chore: update activities state"
           
-          # 嘗試先拉取最新的變更，並指定合併策略 (如果發生衝突則優先保留遠端版本，或自動處理)
-          # 使用 --no-rebase 進行一般合併，避免 rebase 可能帶來的複雜衝突
-          git pull origin main --no-rebase -X ours || true 
+          # 2. 拉取遠端最新進度並重新排序 (Rebase)
+          # 因為有了 fetch-depth: 0，這次的 pull --rebase 絕對能成功接合版本
+          git pull --rebase origin main
           
-          # 再次推送到遠端
+          # 3. 推送上 GitHub
           git push origin main
         else
-          echo "No changes to state.json, skipping commit."
+          echo "state.json 沒有改變，跳過更新。"
         fi
