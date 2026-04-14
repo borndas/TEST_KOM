@@ -37,5 +37,5 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add state.json
-        # 如果 state.json 有更動才進行 commit 和 push
-        git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update activities state" && git push)
+        # 在 push 之前，先將遠端最新的更改拉下來 (pull --rebase)，避免衝突
+        git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update activities state" && git pull --rebase origin main && git push)
