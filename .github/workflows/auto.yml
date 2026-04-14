@@ -21,4 +21,4 @@ jobs:
         run: |
           echo "這是一個每小時執行一次的任務！"
           echo "現在時間是：$(date)"
-          # python main.py
+          python main.py
