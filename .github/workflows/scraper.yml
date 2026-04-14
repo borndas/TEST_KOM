@@ -40,9 +40,12 @@ jobs:
       run: |
         python scraper.py
 
-    - name: Auto Commit state.json
+   - name: Auto Commit state.json
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "chore: update activities state"
         file_pattern: "state.json"
         skip_dirty_check: false
+        # 加入以下兩行，解決「分支分叉 (diverged)」的問題
+        push_options: '--force'  # 如果還是卡住，可以用強制推送
+        create_branch: false
