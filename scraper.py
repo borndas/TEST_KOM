@@ -123,7 +123,7 @@ def main():
                 msg += f"\n📅 時間：{item['time']}"
             if item['link']:
                 msg += f"\n👉 {item['link']}"
-            
+            msg += f"\n👉 {URL}"
             new_messages.append(msg)
             sent_ids.append(item["id"])
             
